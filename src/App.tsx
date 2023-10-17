@@ -5,7 +5,7 @@ import HangmanWord from "./HangmanWord";
 import Keyboard from "./Keyboard";
 
 const App = () => {
-  const [wordToGuess, setWordToGuess] = useState(() => {
+  const [wordToGuess, setWordToGuess] = useState<string>(() => {
     return words[Math.floor(Math.random() * words.length)]; // to pick a random word
   });
 
@@ -23,12 +23,6 @@ const App = () => {
     },
     [guessedLetters]
   );
-
-  // const addGuessedLetter = (letter: string) => {
-  //   if(guessedLetters.includes(letter)) return
-
-  //   setGuessedLetters(currentLetters => [...currentLetters, letter])
-  // }
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -61,7 +55,13 @@ const App = () => {
       <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
       <HangmanWord guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
       <div style={{ alignSelf: "stretch" }}>
-        <Keyboard />
+        <Keyboard
+          activeLetters={guessedLetters.filter((letter) =>
+            wordToGuess.includes(letter)
+          )}
+          inactiveLetters={incorrectLetters}
+          addGuessedLetter={addGuessedLetter}
+        />
       </div>
     </div>
   );
